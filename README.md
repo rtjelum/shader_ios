@@ -4,6 +4,20 @@ Shadertoy shaders running outside the browser: a small desktop viewer that
 runs shadertoy.com code as is, and an iOS app that runs the "Seascape"
 shader natively with Metal.
 
+<p align="center">
+  <img src="docs/sea.gif" width="640" alt="Seascape shader">
+</p>
+
+## Gallery
+
+| | | |
+| :---: | :---: | :---: |
+| <img src="docs/black_hole.gif" width="260" alt="Black hole"><br>`black_hole_shader.s` | <img src="docs/chrome.gif" width="260" alt="Chrome blobs"><br>`chrome_shader.s` | <img src="docs/reflect.gif" width="260" alt="Iridescent blobs"><br>`reflect_shader.s` |
+| <img src="docs/cosmic.gif" width="260" alt="Cosmic"><br>`cosmic_shader.s` | <img src="docs/factal.gif" width="260" alt="Fractal"><br>`factal_shader.s` | <img src="docs/fire.gif" width="260" alt="Fireworks"><br>`fire_shader.s` |
+
+All captured from the desktop viewer. The Seascape at the top is the same
+shader the iOS app runs.
+
 ## Contents
 
 | Path | What it is |
