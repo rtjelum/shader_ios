@@ -5,7 +5,7 @@ runs shadertoy.com code as is, and an iOS app that runs the "Seascape"
 shader natively with Metal.
 
 <p align="center">
-  <img src="docs/sea.gif" width="640" alt="Seascape shader">
+  <img src="docs/sea.gif" width="400" alt="Seascape shader">
 </p>
 
 ## Gallery
