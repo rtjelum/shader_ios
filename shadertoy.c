@@ -35,6 +35,7 @@
 
 #ifdef __APPLE__
 #define GL_SILENCE_DEPRECATION
+#include <OpenGL/OpenGL.h>
 #include <OpenGL/gl.h>
 #include <OpenGL/glext.h>
 #include <GLUT/glut.h>
@@ -53,11 +54,6 @@ static double geometry[4] = { 0, };
 static double mouse[4] = { 0, };
 
 static GLint prog = 0;
-
-#define TARGET_FPS (20)
-
-/* set by the frame timer; GLUT also redisplays on its own, which we skip */
-static int frame_due = 0;
 
 /* framebuffer pixels per window point (2 on Retina displays) */
 static double pixel_scale = 1.0;
@@ -186,8 +182,10 @@ keyboard_handler (unsigned char key, int x, int y)
 }
 
 
+/* Runs whenever GLUT has nothing else to do: handle sync messages and draw
+ * the next frame. The frame rate is limited only by vsync. */
 void
-redisplay (int value)
+idle (void)
 {
   struct pollfd udp;
   int ret;
@@ -200,24 +198,7 @@ redisplay (int value)
       ipc_socket_handle_message ();
     }
 
-  frame_due = 1;
   glutPostRedisplay ();
-
-  /* schedule against a fixed deadline, so render time doesn't add up */
-  {
-    static long long next = 0;
-    struct timespec ts;
-    long long now;
-
-    clock_gettime (CLOCK_MONOTONIC_RAW, &ts);
-    now = ts.tv_sec * 1000LL + ts.tv_nsec / 1000000;
-
-    next = (next == 0) ? now + value : next + value;
-    if (next < now)
-      next = now;
-
-    glutTimerFunc (next - now, redisplay, value);
-  }
 }
 
 
@@ -231,10 +212,6 @@ display (void)
   float shader_time;
   GLint uindex;
   struct timespec ts;
-
-  if (!frame_due)
-    return;
-  frame_due = 0;
 
   glUseProgram (prog);
 
@@ -1322,6 +1299,11 @@ main (int   argc,
   glutCreateWindow ("Shadertoy");
 #ifdef __APPLE__
   enable_hidpi ();
+  {
+    /* sync buffer swaps to the display refresh (60/120 Hz) */
+    GLint one = 1;
+    CGLSetParameter (CGLGetCurrentContext (), kCGLCPSwapInterval, &one);
+  }
 #endif
 
   init_glew ();
@@ -1544,7 +1526,7 @@ main (int   argc,
   glutMotionFunc   (mouse_move_handler);
   glutKeyboardFunc (keyboard_handler);
 
-  redisplay (1000 / TARGET_FPS);
+  glutIdleFunc     (idle);
 
   glutMainLoop ();
 

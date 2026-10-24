@@ -16,7 +16,8 @@ struct ShaderView: UIViewRepresentable {
         view.delegate = context.coordinator
         view.colorPixelFormat = .bgra8Unorm
         view.framebufferOnly = true
-        view.preferredFramesPerSecond = 60
+        // Run at the screen's full refresh rate (120 Hz on ProMotion, see Info.plist).
+        view.preferredFramesPerSecond = UIScreen.main.maximumFramesPerSecond
         // Rendering at full 3x retina is expensive for a ray marcher; 2x looks the same.
         view.contentScaleFactor = min(UIScreen.main.scale, 2)
 
