@@ -1,0 +1,13 @@
+# Build output
+/shadertoy
+*.dSYM/
+
+# macOS
+.DS_Store
+
+# Xcode user state
+xcuserdata/
+DerivedData/
+
+# Old duplicate copy of the project
+/shadertoy/
